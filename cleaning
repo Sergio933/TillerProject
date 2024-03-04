@@ -1,0 +1,58 @@
+Primary key is id_store
+or id_order Foreign key is id_table,
+id_waiter,
+id_device
+
+•	There is no duplicates in all columns
+•	There is differences in the count of columns and count of nulls in(id_table, id_waiter,id_device,dim_source)
+•	M_cached_payed has 263462 negative number
+•	M_cached_price has 263461 negative number
+•	dim_source has upper and lower case letters
+•	date_opened and closed we can separate it to date and time and remove utc
+•	we saw a time differance in minutes that is high for example 35 hours we can remove the customer time > 6 hours
+
+
+SELECT distinct
+    id_order,
+    id_store,
+    id_table,
+    id_waiter,
+    id_device,
+    ##changing format seperating date from time
+    FORMAT_TIMESTAMP ('%Y-%m-%d', date_opened) AS opened_date,
+    FORMAT_TIMESTAMP ('%H:%M:%S', date_opened) AS opened_time,
+    FORMAT_TIMESTAMP ('%Y-%m-%d', date_closed) AS closed_date,
+    FORMAT_TIMESTAMP ('%H:%M:%S', date_closed) AS closed_time,
+    ## replace null with unknown and making them in uppercase
+    CASE
+        WHEN dim_status IS NULL THEN 'UNKNOWN'
+        ELSE UPPER(dim_status)
+    END AS dim_status,
+    CASE
+        WHEN dim_source IS NULL THEN 'UNKNOWN'
+        ELSE UPPER(dim_source)
+    END AS dim_source,
+    ## to see the time difference in minutes
+    TIMESTAMP_DIFF (
+        date_opened, date_closed, MINUTE
+    ) AS time_difference_MINUTE
+
+m_nb_customer,
+### replace null with zeros for calculation
+IFNULL(m_cached_payed, 0) AS m_cached_payed,
+IFNULL(m_cached_price, 0) AS m_cached_price
+FROM
+    `data-analytics-bootcamp-363212.tiller.order_data`
+WHERE
+    id_order IS NOT NULL
+    AND id_store IS NOT NULL
+    AND id_table IS NOT NULL
+    AND id_device IS NOT NULL
+    AND date_opened IS NOT NULL
+    AND date_closed IS NOT NULL
+
+id_order id_store id_table id_waiter id_device date_opened date_closed dim_status dim_source m_nb_customer m_cached_payed m_cached_price
+#### count of colums
+1281148 1281148 200520 1191047 1272279 1281148 1281148 1281148 1224389 1281148 1281148 1281148
+### count of null coulms
+0 0 1080628 90101 8869 0 0 0 56759 0 0 0
