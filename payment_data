@@ -1,0 +1,41 @@
+### Steps undertaken:
+# 1) columns m_cashback and m_credit were all 0.0 or NULL, which is why I deleted these columns from the dataset
+# 2) Clean and update the dim_type column to a new column payment_type_clean
+SELECT
+  id_pay
+  ,id_order
+  ,dim_status
+  ,m_amount
+  ,date_created
+  ,CASE
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'tab') THEN "tab"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'card') THEN "card"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'cash') THEN "cash"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'sumup') THEN "sumup"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'autres') THEN "other"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'fivory') THEN "fivory"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'clickeat') THEN "clickeat"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'alloresto') THEN "alloresto"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'apple pay') THEN "apple_pay"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'deliveroo') THEN "deliveroo"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'siouplait') THEN "siouplait"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'uber eats') THEN "uber_eats"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'bank_check') THEN "bank_check"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'credit_note') THEN "credit_note"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'resto_flash') THEN "resto_flash"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'bank_transfer') THEN "bank_transfer"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'avoir_encaissé') THEN "cash"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'cb_sans_contact') THEN "contactless"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'cb_ticket_resto') THEN "meal_voucher"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'american_express') THEN "american_express"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'ticket_restaurant') THEN "meal_voucher"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'pourboire_carte_bleue') THEN "tip"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'carte ticket restaurant') THEN "meal_voucher"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'carte_ticket_restaurant') THEN "meal_voucher"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'ticket_restaurant_carte') THEN "meal_voucher"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'arrhes') THEN "deposit"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'alipay') THEN "alipay"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'livraison') THEN "delivery"
+    WHEN REGEXP_CONTAINS(LOWER(dim_type), 'carte cadeau') THEN "gift card"
+  END AS payment_type_clean
+FROM `directed-bongo-411310.tiller.payment_data`
