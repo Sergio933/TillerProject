@@ -1,0 +1,8 @@
+#CLEANING Sergio: Cast dim_zipcode STRING>INT64
+SELECT	
+  id_store,
+  date_created,
+  CAST(dim_zipcode AS INT64) AS dim_zipcode,
+  dim_country,
+  dim_currency
+FROM `lewagon-411310.tiller_prj.store_data`
