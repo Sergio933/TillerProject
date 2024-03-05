@@ -1,0 +1,40 @@
+### Steps undertaken: Updated the code using subquery.
+
+WITH CTE1 AS (
+  SELECT
+    id_pay,
+    id_order,
+    dim_status,
+    LOWER(dim_type) AS dim_type,
+    m_amount,
+    m_cashback,
+    m_credit,
+    date_created
+  FROM `directed-bongo-411310.tiller.payment_data`
+)
+
+SELECT
+  CTE1.id_pay
+  ,CTE1.id_order
+  ,CTE1.dim_status
+  ,CTE1.m_amount
+  ,CTE1.dim_type
+  ,CTE1.date_created
+  ,CASE
+    WHEN REGEXP_CONTAINS(CTE1.dim_type,'autres') THEN "other"
+    WHEN REGEXP_CONTAINS(CTE1.dim_type,'apple pay') THEN "apple_pay"
+    WHEN REGEXP_CONTAINS(CTE1.dim_type,'uber eats') THEN "uber_eats"
+    WHEN REGEXP_CONTAINS(CTE1.dim_type,'avoir_encaissé') THEN "cash"
+    WHEN REGEXP_CONTAINS(CTE1.dim_type,'cb_sans_contact') THEN "contactless"
+    WHEN REGEXP_CONTAINS(CTE1.dim_type,'cb_ticket_resto') THEN "meal_voucher"
+    WHEN REGEXP_CONTAINS(CTE1.dim_type,'ticket_restaurant') THEN "meal_voucher"
+    WHEN REGEXP_CONTAINS(CTE1.dim_type,'pourboire_carte_bleue') THEN "tip"
+    WHEN REGEXP_CONTAINS(CTE1.dim_type,'carte ticket restaurant') THEN "meal_voucher"
+    WHEN REGEXP_CONTAINS(CTE1.dim_type,'carte_ticket_restaurant') THEN "meal_voucher"
+    WHEN REGEXP_CONTAINS(CTE1.dim_type,'ticket_restaurant_carte') THEN "meal_voucher"
+    WHEN REGEXP_CONTAINS(CTE1.dim_type,'arrhes') THEN "deposit"
+    WHEN REGEXP_CONTAINS(CTE1.dim_type,'livraison') THEN "delivery"
+    WHEN REGEXP_CONTAINS(CTE1.dim_type,'carte cadeau') THEN "gift_card"
+    ELSE CTE1.dim_type
+  END AS payment_type
+FROM CTE1
