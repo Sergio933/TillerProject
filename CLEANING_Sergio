@@ -1,4 +1,5 @@
-#CLEANING Sergio: Cast dim_zipcode STRING>INT64
+#CLEANING store_data: 
+#1) Cast dim_zipcode STRING>INT64
 SELECT	
   id_store,
   date_created,
@@ -6,8 +7,18 @@ SELECT
   dim_country,
   dim_currency
 FROM `lewagon-411310.tiller_prj.store_data`
+  
+#2) Renaming cols
+SELECT 
+  * EXCEPT (date_created, dim_zipcode, dim_country, dim_currency)
+  ,date_created AS st_date_created
+  ,dim_zipcode AS st_zipcode
+  ,dim_country AS st_country
+  ,dim_currency AS st_currency
+FROM `tiller-batch-1567.tiller_2.store_data_clean`
 
-#CLEANING order_data
+
+#CLEANING order_data:
   #created duration_stayed column (=date_closed - date_opened)
   #dropped 6 rows with negative duration_stayed
 SELECT 
@@ -15,3 +26,15 @@ SELECT
   DATETIME_DIFF(date_closed,date_opened,MINUTE) AS duration_stayed
 FROM `tiller-batch-1567.tiller_2.order_data` 
 WHERE DATETIME_DIFF(date_closed,date_opened,MINUTE)>=0
+
+
+
+#CLEANING payment_data_clean
+#1) Renaming cols
+SELECT
+  * EXCEPT (dim_status, m_amount,dim_type, date_created, payment_type)
+  ,date_created AS pa_date_created
+  ,m_amount AS pa_amount
+  ,payment_type AS pa_payment_type
+  ,dim_status AS pa_status
+FROM `tiller-batch-1567.tiller_2.payment_data_clean`
