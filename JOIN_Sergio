@@ -1,0 +1,13 @@
+WITH join_1 AS (
+  SELECT *
+  FROM `lewagon-411310.tiller_prj.order_data_clean` AS ord
+  JOIN lewagon-411310.tiller_prj.store_data_clean AS sto
+  ON ord.id_store = sto.id_store
+    JOIN lewagon-411310.tiller_prj.payment_data_clean AS pay
+  ON ord.id_order = pay.id_order
+)
+
+SELECT *
+FROM join_1
+JOIN lewagon-411310.tiller_prj.order_line_clean AS line
+ON line.id_order = join_1.ord.id_order
