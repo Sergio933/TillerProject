@@ -6,3 +6,12 @@ SELECT
   dim_country,
   dim_currency
 FROM `lewagon-411310.tiller_prj.store_data`
+
+#CLEANING order_data
+  #created duration_stayed column (=date_closed - date_opened)
+  #dropped 6 rows with negative duration_stayed
+SELECT 
+  *,
+  DATETIME_DIFF(date_closed,date_opened,MINUTE) AS duration_stayed
+FROM `tiller-batch-1567.tiller_2.order_data` 
+WHERE DATETIME_DIFF(date_closed,date_opened,MINUTE)>=0
