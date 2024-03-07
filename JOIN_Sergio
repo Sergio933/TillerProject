@@ -1,13 +1,14 @@
-WITH join_1 AS (
+#First step: Run this query and save the results as BigQuery Table
   SELECT *
-  FROM `lewagon-411310.tiller_prj.order_data_clean` AS ord
-  JOIN lewagon-411310.tiller_prj.store_data_clean AS sto
+  FROM `tiller-batch-1567.tiller_2.order_data` AS ord
+  JOIN tiller-batch-1567.tiller_2.store_data_clean AS sto
   ON ord.id_store = sto.id_store
-    JOIN lewagon-411310.tiller_prj.payment_data_clean AS pay
+    JOIN tiller-batch-1567.tiller_2.payment_data_clean AS pay
   ON ord.id_order = pay.id_order
-)
 
+
+#Second step: Run this query to join the remaining table
 SELECT *
-FROM join_1
-JOIN lewagon-411310.tiller_prj.order_line_clean AS line
-ON line.id_order = join_1.ord.id_order
+FROM tiller-batch-1567.tiller_2.order_line_clean AS line
+JOIN tiller-batch-1567.tiller_2.temporary_table AS jo
+ON line.id_order = jo.id_order
