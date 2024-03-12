@@ -1,0 +1,69 @@
+#STEP1
+#Counting how many day of the week are present in the dataset for each id_store:
+ WITH tmp AS (
+  SELECT 
+    id_store
+    ,FORMAT_TIMESTAMP('%Y-%m-%d',  o_date_opened) AS day_
+    #,FORMAT_TIMESTAMP('%A', (FORMAT_TIMESTAMP('%Y-%m-%d',  o_date_opened))) AS DayOfWeek
+    ,COUNT(*) AS nb
+  FROM `tiller-batch-1567.tiller_2.order_data`
+  GROUP BY   id_store, day_
+  ORDER BY id_store, day_
+ ), tmp2 AS (
+
+  SELECT
+    *
+    ,FORMAT_TIMESTAMP('%A', PARSE_TIMESTAMP('%Y-%m-%d', day_)) AS DayOfWeek
+  FROM tmp
+ )
+ SELECT 
+  id_store
+  ,DayOfWeek
+  ,COUNT(DayOfWeek) AS nb_
+FROM tmp2
+GROUP BY id_store, DayOfWeek
+ORDER BY id_store, DayOfWeek
+
+#STEP2
+#Counting how many orders for each day of the week:
+WITH tab1 AS (
+  SELECT * FROM `tiller-batch-1567.tiller_2.nb_day_open_per_store`
+), 
+tab2 AS (
+SELECT
+  id_store
+  ,weekday_name
+  ,COUNT(*) AS nb_orders
+FROM `tiller-batch-1567.tiller_2.order_data`
+GROUP BY weekday_name, id_store
+ORDER BY id_store
+)
+SELECT 
+  * EXCEPT (weekday_name)
+FROM tab1
+INNER JOIN tab2
+ON tab1.id_store = tab2.id_store AND tab1.DayOfWeek=tab2.weekday_name
+
+#STEP 4 
+#Save the results as a table ('temporary_table_avgdayofwek') 
+
+
+#STEP 5
+#Calculate the average number of orders for day of the week gor each store
+SELECT
+  id_store
+  ,DayOfWeek
+  ,nb_ AS nb_days
+  ,nb_orders
+  ,ROUND(nb_orders/nb_,1) AS avg_nb_orders_per_dayofweek
+ FROM `tiller-batch-1567.tiller_2.temporary_table_avgdayofwek`
+ ORDER BY id_store,
+     CASE
+          WHEN DayOfWeek = 'Monday' THEN 1
+          WHEN DayOfWeek = 'Tuesday' THEN 2
+          WHEN DayOfWeek = 'Wednesday' THEN 3
+          WHEN DayOfWeek = 'Thursday' THEN 4
+          WHEN DayOfWeek = 'Friday' THEN 5
+          WHEN DayOfWeek = 'Saturday' THEN 6
+          WHEN DayOfWeek = 'Sunday' THEN 7
+     END ASC
