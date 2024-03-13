@@ -34,6 +34,7 @@ SELECT
   id_store
   ,weekday_name
   ,COUNT(*) AS nb_orders
+  ,SUM(o_cached_payed) AS o_cached_payed
 FROM `tiller-batch-1567.tiller_2.order_data`
 GROUP BY weekday_name, id_store
 ORDER BY id_store
@@ -44,18 +45,21 @@ FROM tab1
 INNER JOIN tab2
 ON tab1.id_store = tab2.id_store AND tab1.DayOfWeek=tab2.weekday_name
 
+
+
 #STEP 4 
 #Save the results as a table ('temporary_table_avgdayofwek') 
 
 
 #STEP 5
-#Calculate the average number of orders for day of the week gor each store
+#Calculate the average number of orders and average revenue for day of the week for each store
 SELECT
   id_store
   ,DayOfWeek
   ,nb_ AS nb_days
   ,nb_orders
   ,ROUND(nb_orders/nb_,1) AS avg_nb_orders_per_dayofweek
+  ,ROUND(o_cached_payed/nb_orders,2) AS avg_rev
  FROM `tiller-batch-1567.tiller_2.temporary_table_avgdayofwek`
  ORDER BY id_store,
      CASE

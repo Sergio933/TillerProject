@@ -1,0 +1,28 @@
+#STEP1
+#Counting how many day of the week are present in the dataset for each id_store, counting nb of customers and summarizing revenue:
+WITH tmp AS (
+  SELECT 
+    id_store
+    ,FORMAT_TIMESTAMP('%Y-%m-%d',  o_date_closed) AS day_
+    ,COUNT(*) AS nb
+    ,SUM(o_nb_customer) AS nb_cust
+    ,SUM(o_cached_payed) AS revenue
+  FROM `tiller-batch-1567.tiller_2.order_data`
+  GROUP BY   id_store, day_
+  ORDER BY id_store, day_
+ ), tmp2 AS (
+
+  SELECT
+    *
+    ,FORMAT_TIMESTAMP('%A', PARSE_TIMESTAMP('%Y-%m-%d', day_)) AS DayOfWeek
+  FROM tmp
+ )
+ SELECT 
+  id_store
+  ,DayOfWeek
+  ,COUNT(DayOfWeek) AS nb_days
+  ,ROUND(SUM (nb_cust)/COUNT(DayOfWeek),2) AS avg_nb_cust_per_day
+  ,ROUND(SUM (revenue)/COUNT(DayOfWeek),2) AS avg_revenue_per_day
+FROM tmp2
+GROUP BY id_store, DayOfWeek
+ORDER BY id_store, DayOfWeek
