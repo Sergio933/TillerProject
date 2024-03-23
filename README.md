@@ -4,6 +4,21 @@
 
 
 ### Table of contents
+schema:
+- Project's overview:
+- - Business need and Goal
+- - Team
+  - type of analysis
+
+- Introduction:
+- - Who is Tiller
+  - What is their product
+  - What is their business need
+
+- Dashboard:
+- Initial information (Store id selected)
+list that goes through every page of the dashboard and goes in details on every graph
+
 1. [Introduction](#introduction)
 
 2. [Description of the data set](#section2)
