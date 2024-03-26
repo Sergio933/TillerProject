@@ -19,11 +19,11 @@ schema:
 - Initial information (Store id selected)
 list that goes through every page of the dashboard and goes in details on every graph
 
-1. [Introduction](#introduction)
+1. [Overview](#overview)
 
-2. [Description of the data set](#section2)
-    1. [Initial steps](#sec2p1)
-    2. [Descriptive statistics](#sec2p2)
+2. [Introduction](#introduction)
+    1. [Who is Tiller?](#introp1)
+    2. [Business need and project goal](#introp2)
     3. [Start looking at categories of diner](#sec2p3)
     4. [Plots to summarize some statistics](#sec2p4)
 
@@ -46,31 +46,24 @@ list that goes through every page of the dashboard and goes in details on every 
 
 9. [References](#references)
 
-## 1. Introduction <a name="introduction"></a>
-This README will give you a detailed view of the current project.
+## 1. Overview <a name="overview"></a>
+The following project was carried out as the final project for the Data Analytics Bootcamp at Le Wagon Berlin. 
+<br>
+A dataset and business case from the company 'Tiller (by SumUp)' were provided by the Bootcamp. In two weeks, a team of four people (Valeria Andreev, Naser Traiji, Sergio Scandurra, Amrit Mann) had to analyze the data and devise a plan to enhance Tiller's service. This goal was successfully achieved, and the results were presented during the 'Demo Day' by Le Wagon, with speakers Amrit Mann and Sergio Scandurra.
+<br>
+Following this paragraph, you will find a detailed guide on every step of the project.
+
+##  2. Introduction <a name="introduction"></a>
+### Who is Tiller <a name="introp1"></a>
+Tiller is a software company (now acquired by SumUp) with expertise in the cardless payment field. As cited from their website they're "on a mission to empower local businesses with simple and smart tools", by offering a cloud-based Point-of-Sale (POS) for restaurant owners.
+<br>
+Every restaurant owner requesting the service will be therefore provided with iPads that are directly connected to Tiller's database. This devices will be used to take orders from client and process their payment status. Along with that, different type of information will be automatically stored on the database (e.g. Table ID, Order ID, Number of Customer per order, etc...).
 
 
-
-
-
-- The analysis takes the form of a single Jupyter notebook of filename given above. To view this file, download it from this repository and start Jupyter notebook in the folder containing the file. Use the command **Jupyter notebook** on the command line. 
-- Alternatively, view a static version of the notebook (by providing its GitHub url) using Jupyter Nbviewer. 
-- The Tips data set is included in the Seaborn visualization library. It can be loaded provided one has access to the internet when running the notebook. I downloaded it to my local machine to a **data** subdirectory of this repository. My .gitignore file includes the line _data/_ so that the subdirectory is not committed. 
-- All images intended for inclusion in this README are located in the **images** subdirectory of this repository.
-- I have tried to structure the Jupyter notebook and this README so that they have corresponding sections. However, I do not wish to merely repeat here what has been stated in the notebook. I will endeavour to have this README summarize the work of the notebook and, hopefully, complement the analyses done there.
-
-##  2. Description of the data set <a name="section2"></a>
-The data in the tips data set was gathered over a two and a half month period in early 1990. It contains 244 rows of data relating to tips left in a restaurant. I'm pretty certain that this is an American data set so I will assume that the currency is $. Information within includes the total bill, tip, number in the party, day of week, time of day, gender of the person paying the bill, and whether or not they are a smoker. The total bill and tip are non-negative real numbers with two decimal places; the standard way to represent currency. The size variable is an integer with values from 1 to 6. Tip, total bill, and size are numerical variables. The remaining variables are categorical with the following possible values: sex (Male, Female), smoker (Yes, No), day (Thursday, Friday, Saturday, Sunday) and time (Lunch, Dinner). 
-
-I would say that the basic question is: does the tip amount depend on the total bill? One can also ask if the other variables influence the tip amount. Some of these questions will be addressed in sections 3 and 4.
-
-### 2.1 Initial steps <a name="sec2p1"></a>
-I often use sites such as Medium.com to see how other people have investigated data sets using Python. Two examples of such exploratory data analyses are given in the reference list. The very first step is always to check if the data needs cleaning by looking for duplicate rows, zero values or NaNs where they shouldn't be, etc. Our data set is small enough to inspect visually and it looks fine. Counting the number of valid entries in each column confirms this. The head of the data set looks like:
-
-![head](images/head.JPG)
-
-### 2.2 Descriptive statistics <a name="sec2p2"></a>
-Pandas **describe()** can provide a quick summary of the data set as outlined in the notebook. However, without looking at the data in more detail, we cannot yet state what we think a typical diner is. What I mean is, just because most of the diners are male, smokers, and eating dinner on Saturday when we consider one variable at a time, that doesn't mean that all of these conditions are met simultaneously. In the notebook I calculate the tip as a fraction of the total bill as I think it's a measure of tip size that we are more familiar with. That is also done in the https://devarea.com/ reference below, in Wes McKinney's book when he is using the Tips data set as an example, and in the *Case Study 1: Restaurant Tipping* report, also below. So it seems like a sensible step to take. The output of pandas **describe(include="all")** is shown below. Here, all columns of the DataFrame are included in the analysis.
+### Business need and project goal <a name="introp2"></a>
+*What follow is a fictitious business need created for project purposes*
+<br>
+Tiller needs to make a better use of all the collected data from each restaurant. That's why the product department came up with the idea of creating an additional feature that could be sold to the user along with a 'Premium'
 
 ![describeAll](images/describeAll.JPG)
 
